@@ -21,7 +21,7 @@ jobs:
         with:
           ref: ${{ github.event.release.target_commitish }}
 
-      - name: Generate release notes
-        uses: kuvaus/changelog-releasenotes-action@v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Run Update Changelog Action
+        uses: MusfiqDehan/Auto-Update-CHANGELOG@v1.0.4
+        with:
+          version: "HVM"
