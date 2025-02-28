@@ -3,16 +3,13 @@ name: "Update Changelog"
 
 on:
   release:
-    types: [released,edited]
+    types: [edited]
 
 jobs:
   update:
     runs-on: ubuntu-latest
 
     permissions:
-      # Give the default GITHUB_TOKEN write permission to commit and push the 
-      # updated CHANGELOG back to the repository.
-      # https://github.blog/changelog/2023-02-02-github-actions-updating-the-default-github_token-permissions-to-read-only/
       contents: write
 
     steps:
@@ -20,8 +17,17 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: ${{ github.event.release.target_commitish }}
+      - name: Update version
+        if: github.event.release.tag_name == 'Release'
+        run: |
+          text2=${{ github.event.release.body }}
+          text3=${{ github.event.release.assets[0].updated_at }}
+          text4="\n## HavenM - $text3\n$text2\n"
+          cat $text4 >> 'CHANGELOG.md'
 
-      - name: Run Update Changelog Action
-        uses: MusfiqDehan/Auto-Update-CHANGELOG@v1.0.4
+      - name: Commit updated CHANGELOG
+        uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          version: "HVM"
+          branch: ${{ github.event.release.target_commitish }}
+          commit_message: Update CHANGELOG
+          file_pattern: CHANGELOG.md
