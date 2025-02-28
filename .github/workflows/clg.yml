@@ -6,24 +6,20 @@ on:
     types: [edited]
 
 jobs:
-  update:
+  Update_Changelog:
+    if: github.event.release.tag_name == 'Release'
     runs-on: ubuntu-latest
 
     permissions:
       contents: write
-
+      
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.release.target_commitish }}
+
       - name: Update version
-        if: github.event.release.tag_name == 'Release'
         run: |
-          text2=${{ github.event.release.body }}
-          text3=${{ github.event.release.assets[0].updated_at }}
-          text4="\n## HavenM - $text3\n$text2\n"
-          cat $text4 >> 'CHANGELOG.md'
+          cat "\n## HavenM - ${{ github.event.release.body }}\n${{ github.event.release.assets[0].updated_at }}\n" >> 'CHANGELOG.md'
 
       - name: Commit updated CHANGELOG
         uses: stefanzweifel/git-auto-commit-action@v5
