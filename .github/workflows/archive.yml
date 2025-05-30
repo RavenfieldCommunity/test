@@ -35,6 +35,13 @@ jobs:
             echo "name=$naa" > $GITHUB_ENV
           fi
           echo "2" > LAST_TM
+          ls
+
+      - name: Release 
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: waow
+          files: ${{env.name}}
 
       - name: Commit updated Time
         uses: stefanzweifel/git-auto-commit-action@v5
@@ -42,9 +49,3 @@ jobs:
           branch: main
           commit_message: Update Time
           file_pattern: LAST_TM
-
-      - name: Release 
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: waow
-          files: ${{env.name}}
