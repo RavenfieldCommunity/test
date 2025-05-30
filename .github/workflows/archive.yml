@@ -31,6 +31,8 @@ jobs:
             naa="add-$(date +'%Y%m%d%H%M').txt"
             echo $naa
             mv add-temp.txt $naa
+            cat add-temp.txt
+            cat $naa
             echo "name=$naa" > $GITHUB_ENV
           fi
           echo "2" > LAST_TM
@@ -42,7 +44,7 @@ jobs:
           commit_message: Update Time
           file_pattern: LAST_TM
 
-      - name: Release
+      - name: Release 
         uses: softprops/action-gh-release@v2
         with:
           tag_name: waow
