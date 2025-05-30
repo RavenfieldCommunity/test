@@ -1,0 +1,36 @@
+# .github/workflows/update-changelog.yaml
+name: "Archive dll"
+
+on:
+  workflow_dispatch:
+
+jobs:
+  Update_Changelog:
+    #aif: github.event.release.tag_name == 'Release'
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Update version
+        run: |
+          curl https://github.com/RavenfieldCommunity/test/releases/download/d4/add.txt -o add.txt
+          echo "1" >> 'LAST_TM'
+
+      - name: Commit updated Time
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          branch: main
+          commit_message: Update Time
+          file_pattern: LAST_TM
+
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: add-1.txt
