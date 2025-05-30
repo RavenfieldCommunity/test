@@ -26,7 +26,7 @@ jobs:
 
           if [ $fileUrl != $(cat LAST_TM) ]; then
             naa="add-$(date +'%Y%m%d%H:%M').txt"
-            rm add-temp.txt $naa
+            mv add-temp.txt $naa
             echo "name=$naa" > $GITHUB_ENV
           fi
           echo "2" > LAST_TM
