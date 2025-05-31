@@ -1,12 +1,10 @@
-# .github/workflows/update-changelog.yaml
 name: "Archive dll"
 
 on:
   workflow_dispatch:
 
 jobs:
-  Update_Changelog:
-    #aif: github.event.release.tag_name == 'Release'
+  Archive_dll:
     runs-on: ubuntu-latest
 
     permissions:
@@ -20,32 +18,28 @@ jobs:
 
       - name: Update version
         run: |
-          curl "https://github.com/RavenfieldCommunity/test/releases/download/d4/GameLibs.Ravenfield.0.32.0.nupkg" -o add-temp.txt
-          json=$(curl 'https://api.github.com/repos/RavenfieldCommunity/test/releases/latest' -H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7' -H 'Accept-Language: zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6' -H 'Connection: keep-alive' -H 'Sec-Fetch-Dest: document' -H 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36 Edg/135.0.0.0' -H 'sec-ch-ua: "Microsoft Edge";v="135", "Not-A.Brand";v="8", "Chromium";v="135"')
-          fileUrl=$(echo $json | grep -o -P '(?<="updated_at": ").*?(?=")' - )	
-
-          if [ "$fileUrl
-          " != $(cat LAST_TM) ]; then
-            echo $fileUrl
-            cat LAST_TM
-            naa="add-$(date +'%Y%m%d%H%M').txt"
-            echo $naa
-            mv add-temp.txt $naa
-            cat $naa
-            echo "name=$naa" > $GITHUB_ENV
+          nowHash=$(git log -1 --format="%H")
+          if [ $nowHash != $(cat LASTCOMMIT_HASH) ]; then
+            echo $nowHash
+            cat LASTCOMMIT_HASH
+            targetname="add-$(date +'%Y%m%d%H%M').txt"
+            echo $targetname
+            curl "https://github.com/RavenfieldCommunity/test/releases/download/d4/GameLibs.Ravenfield.0.32.0.nupkg" -o $targetname
+            curl -L \
+              -X POST \
+              -H "Accept: application/vnd.github+json" \
+              -H "Authorization: Archiver ${{ secrets.GITHUB_TOKEN }}" \
+              -H "X-GitHub-Api-Version: 2022-11-28" \
+              -H "Content-Type: application/octet-stream" \
+              "https://uploads.github.com/repos/RavenfieldCommunity/test/releases/222068261/assets?name=$targetname" \
+              --data-binary $targetname
           fi
           echo "2" > LAST_TM
           ls
-
-      - name: Release 
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: waow
-          files: ${{env.name}}
 
       - name: Commit updated Time
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           branch: main
-          commit_message: Update Time
-          file_pattern: LAST_TM
+          commit_message: Update hash
+          file_pattern: LASTCOMMIT_HASH
