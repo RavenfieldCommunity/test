@@ -39,11 +39,11 @@ jobs:
           ls
 
       - name: Release
-        uses: ncipollo/release-action@v1
+        uses: softprops/action-gh-release@v2.2.2
         with:
-          tag: waow
-          allowUpdates: true
-          artifacts: ${{env.name}}
+          tag_name: waow
+          files: ${{env.name}}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Commit updated Time
         uses: stefanzweifel/git-auto-commit-action@v5
