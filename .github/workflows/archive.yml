@@ -33,9 +33,16 @@ jobs:
               -H "Content-Type: application/octet-stream" \
               "https://uploads.github.com/repos/RavenfieldCommunity/test/releases/222068261/assets?name=$targetname" \
               --data-binary $targetname
+            echo "name=$targetname" > $GITHUB_ENV
           fi
           echo "2" > LASTCOMMIT_HASH
           ls
+
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: waow
+          files: ${{env.name}}
 
       - name: Commit updated Time
         uses: stefanzweifel/git-auto-commit-action@v5
