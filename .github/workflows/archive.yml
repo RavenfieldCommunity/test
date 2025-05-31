@@ -22,7 +22,7 @@ jobs:
           if [[ $nowHash != $(cat LASTCOMMIT_HASH) ]]; then
             echo $nowHash
             cat LASTCOMMIT_HASH
-            targetname="add-$(date +'%Y%m%d%H%M').txt"
+            targetname="GameLibs.Ravenfield.0.32.0-$(date +'%Y%m%d%H%M').nupkg"
             echo $targetname
             curl "https://github.com/RavenfieldCommunity/test/releases/download/d4/GameLibs.Ravenfield.0.32.0.nupkg" -o $targetname
             curl -L \
@@ -42,7 +42,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: waow
-          files: ${{env.name}}+"1"
+          files: ${{env.name}}
 
       - name: Commit updated Time
         uses: stefanzweifel/git-auto-commit-action@v5
