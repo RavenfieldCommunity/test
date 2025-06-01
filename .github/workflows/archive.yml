@@ -24,7 +24,7 @@ jobs:
             cat LASTCOMMIT_HASH
             targetname="Assembly-CSharp-$(date +'%Y%m%d%H%M').dll"
             echo $targetname
-            curl -L "Assembly-CSharp.dll" -o $targetname
+            curl -L "https://github.com/RavenfieldCommunity/HavenM/releases/download/Release/Assembly-CSharp.dll" -o $targetname
             echo "name=$targetname" > $GITHUB_ENV
             echo $nowHash > LASTCOMMIT_HASH
           fi
