@@ -24,7 +24,7 @@ jobs:
             cat LASTCOMMIT_HASH
             targetname="GameLibs.Ravenfield.0.32.0-$(date +'%Y%m%d%H%M').nupkg"
             echo $targetname
-            curl "https://github.com/RavenfieldCommunity/test/releases/download/d4/GameLibs.Ravenfield.0.32.0.nupkg" -o $targetname
+            curl -L "https://github.com/RavenfieldCommunity/test/releases/download/d4/GameLibs.Ravenfield.0.32.0.nupkg" -o $targetname
             curl -L \
               -X POST \
               -H "Accept: application/vnd.github+json" \
@@ -42,7 +42,7 @@ jobs:
         uses: softprops/action-gh-release@v2.2.2
         with:
           tag_name: waow
-          files: "LAST_TM"
+          files: ${{env.name}}
 
       - name: Commit updated Time
         uses: stefanzweifel/git-auto-commit-action@v5
