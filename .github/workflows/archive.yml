@@ -19,7 +19,7 @@ jobs:
       - name: Update version
         run: |
           nowHash=$(git log -2 --format="%H" | tail -n 1)
-          if [[ $nowHash != $(cat LASTCOMMIT_HASH) ]]; then
+          if [[ "$nowHash" != "$(cat LASTCOMMIT_HASH)" ]]; then
             echo $nowHash
             cat LASTCOMMIT_HASH
             targetname="Assembly-CSharp-$(date +'%Y%m%d%H%M').dll"
