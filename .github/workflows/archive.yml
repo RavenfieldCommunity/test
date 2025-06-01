@@ -42,8 +42,7 @@ jobs:
         uses: softprops/action-gh-release@v2.2.2
         with:
           tag_name: waow
-          files: ${{env.name}}
-          token: ${{ secrets.GITHUB_TOKEN }}
+          files: "LAST_TM"
 
       - name: Commit updated Time
         uses: stefanzweifel/git-auto-commit-action@v5
